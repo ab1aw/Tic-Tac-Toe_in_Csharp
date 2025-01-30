@@ -6,6 +6,12 @@ Can you win, or at least draw?
 
 Try your luck. You always get to go first if that's any consolation.
 
+## Acknowledgements:
+
+### MiniMax Algorithm:
+// https://www.geeksforgeeks.org/finding-optimal-move-in-tic-tac-toe-using-minimax-algorithm-in-game-theory/
+
+
 ## Built using:
 
 Microsoft Visual Studio Community 2022
