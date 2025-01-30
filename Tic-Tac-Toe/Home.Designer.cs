@@ -39,11 +39,11 @@ namespace Tic_Tac_Toe
             this.label1.Font = new System.Drawing.Font("Poor Richard", 20F, ((System.Drawing.FontStyle)(((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic) 
                 | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.Lime;
-            this.label1.Location = new System.Drawing.Point(50, 30);
+            this.label1.Location = new System.Drawing.Point(5, 30);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(315, 38);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Lets Play Tic-Tac-Toe";
+            this.label1.Text = "Let's Play Tic-Tac-Toe";
             // 
             // btnGo
             // 
