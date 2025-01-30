@@ -7,14 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Tic_Tac_Toe.MiniMax;
 
 namespace Tic_Tac_Toe
 {
     public partial class Form1 : Form
     {
-        bool playerTurn = true;// X Turn -> true , O Turn -> false
+
         int turnCount = 0;
         int winStreak = 0; // Positive for X, Negative for O
+
+        MiniMax miniMax;
 
         public Form1()
         {
@@ -23,12 +26,14 @@ namespace Tic_Tac_Toe
             InitializeComponent();
             initializeButtonMatrix();
             updateWinStreak("");
+
+            miniMax = new MiniMax();
+
         }
 
         private void buttonClick(object sender, EventArgs e)
         {
-            // Somebody can't spell 'Button'  :^)
-            Button theButtton = (Button)sender;
+            Button theButton = (Button)sender;
 
             // This may be the place to integrate the MiniMax algorithm.
             // We are switching between the two human players here.
@@ -49,27 +54,56 @@ namespace Tic_Tac_Toe
 
             // The human always starts first. Perhaps rename this to humanTurn?
 
-            // How do we map theButtton to the buttonMatix (and thus to the board)?
+            // How do we map theButton to the buttonMatix (and thus to the board)?
             // Perhaps based on the .Name field?
             // Need to convert the button name to a [row, column] tuple.
             // Going to be yet another hack.
 
-            char[] rowAndColumn = theButtton.Name.ToCharArray();
+            char[] rowAndColumn = theButton.Name.ToCharArray();
             int row = rowAndColumn[0] - 'A';
             int column = rowAndColumn[1] - '1';
 
-//            theButtton.Text = "X";
-//            theButtton.Enabled = false;
-
-            buttonMatrix[row, column].Text = ((playerTurn) ? "X" : "O");
+            // Human moves first as 'X'
+            buttonMatrix[row, column].Text = "X";
             buttonMatrix[row, column].Enabled = false;
 
+            // Update the miniMax board to match the button matrix.
+            // The miniMax board is the computer's view of the game state.
+            miniMax.board[row, column] = 'x';
+            miniMax.drawTheBoard(miniMax.board);
+
             turnCount++;//for the draws, the maxium play is 9
-            playerTurn = !playerTurn;
-            checkWinner();
+            if (checkWinner(true))
+            {
+                // Stop the game if there is a winner or a draw.
+                return;
+            }
+
+            // Switch to the computer as player.
+
+            // Computer makes a move.
+            Move bestMove = findBestMove(miniMax.board, 'o', 'x');
+
+            // Need to translate from bestMove.row|column to buttonMatrix.
+            // Computer is 'O'
+            buttonMatrix[bestMove.row, bestMove.col].Text = "O";
+            buttonMatrix[bestMove.row, bestMove.col].Enabled = false;
+
+            // Update the miniMax board.
+            miniMax.board[bestMove.row, bestMove.col] = 'o';
+            miniMax.drawTheBoard(miniMax.board);
+
+            //            int optimalScore = bestMove.move;
+
+            turnCount++;//for the draws, the maxium play is 9
+            if (checkWinner(false))
+            {
+                // Stop the game if there is a winner or a draw.
+                return;
+            }
         }
 
-        private void checkWinner()
+        private bool checkWinner(bool isHuman)
         {
             /*
             foreach(Control x in Controls)//emunmeration of all controls{}
@@ -107,26 +141,29 @@ namespace Tic_Tac_Toe
 
                 String winner = "";
 
-                if (playerTurn)
-                    winner = "O";
-                else
+                if (isHuman)
                     winner = "X";
+                else
+                    winner = "O";
                 updateWinStreak(winner);
 
                 MessageBox.Show(winner + " Wins!", "GG");
                 autoNewGame();
+                return true;
             }
             else
             {
-                if(turnCount == 9)
+                if (turnCount == 9)
                 {
                     MessageBox.Show("Draw");
                     //disableAllbtn();
                     autoNewGame();
+                    return true;
                 }
 
             }
 
+            return false;
         }
 
         /*
@@ -145,11 +182,11 @@ namespace Tic_Tac_Toe
 
         private void autoNewGame()
         {
-            playerTurn = true;
-            turnCount = 0;
-
             try
             {
+                // Clear the miniMax board.
+                miniMax.resetTheBoard();
+
                 foreach (Control c in Controls)
                 {
                     // This check is important. You can not rely on the exception handling to only process buttons.
@@ -161,6 +198,8 @@ namespace Tic_Tac_Toe
                         (c as Button).Text = "";
                     }
                 }
+
+                turnCount = 0;
             }
             catch { }
         } 
