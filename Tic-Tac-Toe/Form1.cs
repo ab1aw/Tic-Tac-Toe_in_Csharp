@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -64,6 +65,7 @@ namespace Tic_Tac_Toe
             int column = rowAndColumn[1] - '1';
 
             // Human moves first as 'X'
+            Console.Write("...human moves...\n");
             buttonMatrix[row, column].Text = "X";
             buttonMatrix[row, column].Enabled = false;
 
@@ -73,16 +75,38 @@ namespace Tic_Tac_Toe
             miniMax.drawTheBoard(miniMax.board);
 
             turnCount++;//for the draws, the maxium play is 9
-            if (checkWinner(true))
+            if (checkWinner(true, 0))
             {
                 // Stop the game if there is a winner or a draw.
                 return;
             }
 
             // Switch to the computer as player.
+            Console.Write("...computer moves...\n");
 
             // Computer makes a move.
             Move bestMove = findBestMove(miniMax.board, 'o', 'x');
+
+            // If the computer has no moves then the returned values are:
+            //   bestMove.row == -1;
+            //   bestMove.column == -1;
+            //   bestMove.move == -1000;
+
+            // If the computer has made a winning move then the returned values are:
+            //   bestMove.row == ?;
+            //   bestMove.column == ?;
+            //   bestMove.move == 10;
+
+            if (bestMove.move < 0)
+            {
+                Console.Write("...no available moves for the computer : {0}!\n", bestMove.move);
+
+                if (checkWinner(false, bestMove.move))
+                {
+                    // Stop the game if there is a winner or a draw.
+                    return;
+                }
+            }
 
             // Need to translate from bestMove.row|column to buttonMatrix.
             // Computer is 'O'
@@ -93,47 +117,22 @@ namespace Tic_Tac_Toe
             miniMax.board[bestMove.row, bestMove.col] = 'o';
             miniMax.drawTheBoard(miniMax.board);
 
-            //            int optimalScore = bestMove.move;
+            Console.Write("...and the optimal score is {0}!\n", bestMove.move);
 
             turnCount++;//for the draws, the maxium play is 9
-            if (checkWinner(false))
+            if (checkWinner(false, bestMove.move))
             {
                 // Stop the game if there is a winner or a draw.
                 return;
             }
         }
 
-        private bool checkWinner(bool isHuman)
+        private bool checkWinner(bool isHuman, int score)
         {
             /*
             foreach(Control x in Controls)//emunmeration of all controls{}
             */
-            bool weHaveWinner = false;
-
-            //Switch possible ?
-
-            //---
-            if ((A1.Text == A2.Text) && (A2.Text == A3.Text) && (!A2.Enabled))
-                weHaveWinner = true;
-            else if ((B1.Text == B2.Text) && (B2.Text == B3.Text) && (!B2.Enabled))
-                weHaveWinner = true;
-            else if ((C1.Text == C2.Text) && (C2.Text == C3.Text) && (!C2.Enabled))
-                weHaveWinner = true;
-
-            // |||
-            else if ((A1.Text == B1.Text) && (B1.Text == C1.Text) && (!B1.Enabled))
-                weHaveWinner = true;
-            else if ((A2.Text == B2.Text) && (B2.Text == C2.Text) && (!B2.Enabled))
-                weHaveWinner = true;
-            else if ((A3.Text == B3.Text) && (B3.Text == C3.Text) && (!B3.Enabled))
-                weHaveWinner = true;
-
-            //X
-            else if ((A1.Text == B2.Text) && (B2.Text == C3.Text) && (!B2.Enabled))
-                weHaveWinner = true;
-            else if ((A3.Text == B2.Text) && (B2.Text == C1.Text) && (!B2.Enabled))
-                weHaveWinner = true;
-              
+            bool weHaveWinner = ((score == 10) ? true : false);
 
             if (weHaveWinner)
             {
@@ -147,6 +146,7 @@ namespace Tic_Tac_Toe
                     winner = "O";
                 updateWinStreak(winner);
 
+                Console.Write("...and the winner is {0}!\n", winner);
                 MessageBox.Show(winner + " Wins!", "GG");
                 autoNewGame();
                 return true;
@@ -155,6 +155,7 @@ namespace Tic_Tac_Toe
             {
                 if (turnCount == 9)
                 {
+                    Console.Write("...we have a draw!\n");
                     MessageBox.Show("Draw");
                     //disableAllbtn();
                     autoNewGame();
@@ -200,6 +201,7 @@ namespace Tic_Tac_Toe
                 }
 
                 turnCount = 0;
+                Console.Write("\nNEW GAME!\n");
             }
             catch { }
         } 
