@@ -1,4 +1,6 @@
-﻿namespace Tic_Tac_Toe
+﻿using System.Data.Common;
+
+namespace Tic_Tac_Toe
 {
     partial class Form1
     {
@@ -20,6 +22,7 @@
             base.Dispose(disposing);
         }
 
+        // What does this mean?
         #region Windows Form Designer generated code
 
         /// <summary>
@@ -154,7 +157,7 @@
             this.winStreakLabel.AutoSize = true;
             this.winStreakLabel.Location = new System.Drawing.Point(13, 357);
             this.winStreakLabel.Name = "winStreakLabel";
-            this.winStreakLabel.Size = new System.Drawing.Size(253, 17);
+            this.winStreakLabel.Size = new System.Drawing.Size(230, 16);
             this.winStreakLabel.TabIndex = 11;
             this.winStreakLabel.Text = "X is on a win streak of 50, click to reset";
             this.winStreakLabel.Click += new System.EventHandler(this.winStreakLabel_Click);
@@ -184,12 +187,40 @@
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Tic-Tac-Toe";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
+
+        // Do we want to create a 3x3 matrix of buttons that map to a Tic Tac Toe board?
+        // In this manner we can (possibly) translate between the MiniMax algorithm move
+        // tuple and the buttons.
+
+        private void initializeButtonMatrix()
+        {
+            // Reference https://stackoverflow.com/questions/5678216/all-possible-array-initialization-syntaxes
+            this.buttonMatrix = new System.Windows.Forms.Button[3, 3];
+
+            // This is a hack to map the form buttons to an array that can
+            // interface to the MiniMax algorithm board.
+            // I have not yet learned how to create or manipulate forms.
+
+            // Letter is the row, number is the column.
+            this.buttonMatrix[0, 0] = this.A1;
+            this.buttonMatrix[0, 1] = this.A2;
+            this.buttonMatrix[0, 2] = this.A3;
+            this.buttonMatrix[1, 0] = this.B1;
+            this.buttonMatrix[1, 1] = this.B2;
+            this.buttonMatrix[1, 2] = this.B3;
+            this.buttonMatrix[2, 0] = this.C1;
+            this.buttonMatrix[2, 1] = this.C2;
+            this.buttonMatrix[2, 2] = this.C3;
+        }
+
+        private System.Windows.Forms.Button[,] buttonMatrix;
 
         private System.Windows.Forms.Button A1;
         private System.Windows.Forms.Button B2;
