@@ -1,5 +1,11 @@
 # Tic-Tac-Toe in C#
 
+## It's You Against the Computer!
+
+Can you win, or at least draw?
+
+Try your luck. You always get to go first if that's any consolation.
+
 ## Built using:
 
 Microsoft Visual Studio Community 2022
