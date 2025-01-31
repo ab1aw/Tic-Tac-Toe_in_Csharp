@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tic_Tac_Toe
 {
@@ -10,7 +6,7 @@ namespace Tic_Tac_Toe
     {
         public class Move
         {
-            public int row, col, move;
+            public int row, col, optimal_value;
         };
 
         public char[,] board = {{ '_', '_', '_' },
@@ -132,7 +128,7 @@ namespace Tic_Tac_Toe
             if (isMovesLeft(board) == false)
                 return 0;
 
-            // If this maximizer's move 
+            // If this maximizer's optimal_value 
             if (isMax)
             {
                 int best = -1000;
@@ -145,7 +141,7 @@ namespace Tic_Tac_Toe
                         // Check if cell is empty 
                         if (board[i, j] == '_')
                         {
-                            // Make the move 
+                            // Make the optimal_value 
                             board[i, j] = player;
 
                             // Call minimax recursively and choose 
@@ -153,7 +149,7 @@ namespace Tic_Tac_Toe
                             best = Math.Max(best, minimax(board,
                                             depth + 1, !isMax, player, opponent));
 
-                            // Undo the move 
+                            // Undo the optimal_value 
                             board[i, j] = '_';
                         }
                     }
@@ -161,7 +157,7 @@ namespace Tic_Tac_Toe
                 return best;
             }
 
-            // If this minimizer's move 
+            // If this minimizer's optimal_value 
             else
             {
                 int best = 1000;
@@ -174,7 +170,7 @@ namespace Tic_Tac_Toe
                         // Check if cell is empty 
                         if (board[i, j] == '_')
                         {
-                            // Make the move 
+                            // Make the optimal_value 
                             board[i, j] = opponent;
 
                             // Call minimax recursively and choose 
@@ -182,7 +178,7 @@ namespace Tic_Tac_Toe
                             best = Math.Min(best, minimax(board,
                                             depth + 1, !isMax, player, opponent));
 
-                            // Undo the move 
+                            // Undo the optimal_value 
                             board[i, j] = '_';
                         }
                     }
@@ -192,14 +188,14 @@ namespace Tic_Tac_Toe
         }
 
         // This will return the best possible 
-        // move for the player 
+        // optimal_value for the player 
         static public Move findBestMove(char[,] board, char player, char opponent)
         {
             int bestVal = -1000;
             Move bestMove = new Move();
             bestMove.row = -1;
             bestMove.col = -1;
-            bestMove.move = 0;
+            bestMove.optimal_value = 0;
 
             // Traverse all cells, evaluate minimax function 
             // for all empty cells. And return the cell 
@@ -211,18 +207,18 @@ namespace Tic_Tac_Toe
                     // Check if cell is empty 
                     if (board[i, j] == '_')
                     {
-                        // Make the move 
+                        // Make the optimal_value 
                         board[i, j] = player;
 
                         // compute evaluation function for this 
-                        // move. 
+                        // optimal_value. 
                         int moveVal = minimax(board, 0, false, player, opponent);
 
-                        // Undo the move 
+                        // Undo the optimal_value 
                         // Do we want to remove this or update it per-player?
                         board[i, j] = '_';
 
-                        // If the value of the current move is 
+                        // If the value of the current optimal_value is 
                         // more than the best value, then update 
                         // best/ 
                         if (moveVal > bestVal)
@@ -237,7 +233,7 @@ namespace Tic_Tac_Toe
 
             Console.Write("The value of the best Move " +
                                 "is : {0}\n\n", bestVal);
-            bestMove.move = bestVal;
+            bestMove.optimal_value = bestVal;
 
             return bestMove;
         }

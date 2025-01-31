@@ -196,7 +196,7 @@ namespace Tic_Tac_Toe
         #endregion
 
         // Do we want to create a 3x3 matrix of buttons that map to a Tic Tac Toe board?
-        // In this manner we can (possibly) translate between the MiniMax algorithm move
+        // In this manner we can (possibly) translate between the MiniMax algorithm optimal_value
         // tuple and the buttons.
 
         private void initializeButtonMatrix()

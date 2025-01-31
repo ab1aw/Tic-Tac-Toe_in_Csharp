@@ -1,12 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Tic_Tac_Toe.MiniMax;
 
@@ -42,10 +34,10 @@ namespace Tic_Tac_Toe
             // How would we translate the MiniMax algorithm output into the corresponding button push?
 
             // The sender (aka theButton) needs to be derived from the MiniMax algorithm output value.
-            // The MiniMax algorithm returns a move as a row:column tuple.
+            // The MiniMax algorithm returns a optimal_value as a row:column tuple.
             // Perhaps we could map the buttons to an array? Then access that array using the tuple?
 
-            // On a button click we are responding to the human's move choice.
+            // On a button click we are responding to the human's optimal_value choice.
             // We need to translate that back into a board state. This requires translating
             // the button into a row|column tuple.
 
@@ -84,24 +76,24 @@ namespace Tic_Tac_Toe
             // Switch to the computer as player.
             Console.Write("...computer moves...\n");
 
-            // Computer makes a move.
+            // Computer makes a optimal_value.
             Move bestMove = findBestMove(miniMax.board, 'o', 'x');
 
             // If the computer has no moves then the returned values are:
             //   bestMove.row == -1;
             //   bestMove.column == -1;
-            //   bestMove.move == -1000;
+            //   bestMove.optimal_value == -1000;
 
-            // If the computer has made a winning move then the returned values are:
+            // If the computer has made a winning optimal_value then the returned values are:
             //   bestMove.row == ?;
             //   bestMove.column == ?;
-            //   bestMove.move == 10;
+            //   bestMove.optimal_value == 10;
 
-            if (bestMove.move < 0)
+            if (bestMove.optimal_value < 0)
             {
-                Console.Write("...no available moves for the computer : {0}!\n", bestMove.move);
+                Console.Write("...no available moves for the computer : {0}!\n", bestMove.optimal_value);
 
-                if (checkWinner(false, bestMove.move))
+                if (checkWinner(false, bestMove.optimal_value))
                 {
                     // Stop the game if there is a winner or a draw.
                     return;
@@ -117,10 +109,10 @@ namespace Tic_Tac_Toe
             miniMax.board[bestMove.row, bestMove.col] = 'o';
             miniMax.drawTheBoard(miniMax.board);
 
-            Console.Write("...and the optimal score is {0}!\n", bestMove.move);
+            Console.Write("...and the optimal score is {0}!\n", bestMove.optimal_value);
 
             turnCount++;//for the draws, the maxium play is 9
-            if (checkWinner(false, bestMove.move))
+            if (checkWinner(false, bestMove.optimal_value))
             {
                 // Stop the game if there is a winner or a draw.
                 return;
@@ -204,7 +196,7 @@ namespace Tic_Tac_Toe
                 Console.Write("\nNEW GAME!\n");
             }
             catch { }
-        } 
+        }
 
         /// <summary>
         /// Updates the label indicating the current win streak
